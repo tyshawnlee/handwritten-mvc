@@ -29,6 +29,9 @@ public final class ClassUtil {
 
     /**
      * 加载类
+     * @param className 类名
+     * @param isInitialized 是否初始化
+     * @return
      */
     public static Class<?> loadClass(String className, boolean isInitialized) {
         Class<?> cls;

@@ -3,7 +3,7 @@ package com.tyshawn.framework.bean;
 import java.lang.reflect.Method;
 
 /**
- * 封装 Action 信息
+ * 封装 Controller 信息
  */
 public class Handler {
 

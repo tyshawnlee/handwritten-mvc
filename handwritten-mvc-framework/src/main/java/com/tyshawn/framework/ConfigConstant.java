@@ -5,15 +5,18 @@ package com.tyshawn.framework;
  */
 public interface ConfigConstant {
 
-    String CONFIG_FILE = "smart.properties";
+    //配置文件的名称
+    String CONFIG_FILE = "handwritten.properties";
 
-    String JDBC_DRIVER = "smart.framework.jdbc.driver";
-    String JDBC_URL = "smart.framework.jdbc.url";
-    String JDBC_USERNAME = "smart.framework.jdbc.username";
-    String JDBC_PASSWORD = "smart.framework.jdbc.password";
+    //数据库
+    String JDBC_DRIVER = "handwritten.framework.jdbc.driver";
+    String JDBC_URL = "handwritten.framework.jdbc.url";
+    String JDBC_USERNAME = "handwritten.framework.jdbc.username";
+    String JDBC_PASSWORD = "handwritten.framework.jdbc.password";
 
-    String APP_BASE_PACKAGE = "smart.framework.app.base_package";
-    String APP_JSP_PATH = "smart.framework.app.jsp_path";
-    String APP_ASSET_PATH = "smart.framework.app.asset_path";
-    String APP_UPLOAD_LIMIT = "smart.framework.app.upload_limit";
+    //文件地址
+    String APP_BASE_PACKAGE = "handwritten.framework.app.base_package";
+    String APP_JSP_PATH = "handwritten.framework.app.jsp_path";
+    String APP_ASSET_PATH = "handwritten.framework.app.asset_path";
+    String APP_UPLOAD_LIMIT = "handwritten.framework.app.upload_limit";
 }

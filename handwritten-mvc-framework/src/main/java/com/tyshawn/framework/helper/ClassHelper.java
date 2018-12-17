@@ -14,12 +14,14 @@ import java.util.Set;
 public final class ClassHelper {
 
     /**
-     * 定义类集合（用于存放所加载的类）
+     * 定义类集合（存放应用包名下的所有类）
      */
     private static final Set<Class<?>> CLASS_SET;
 
     static {
+        //获取基础包名
         String basePackage = ConfigHelper.getAppBasePackage();
+        //获取基础包名下所有类
         CLASS_SET = ClassUtil.getClassSet(basePackage);
     }
 

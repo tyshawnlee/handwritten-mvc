@@ -31,13 +31,12 @@ public class DispatcherServlet extends HttpServlet {
 
     @Override
     public void init(ServletConfig servletConfig) throws ServletException {
+        //初始化相关的helper类
         HelperLoader.init();
 
         ServletContext servletContext = servletConfig.getServletContext();
 
         registerServlet(servletContext);
-
-        UploadHelper.init(servletContext);
     }
 
     private void registerServlet(ServletContext servletContext) {
@@ -61,12 +60,8 @@ public class DispatcherServlet extends HttpServlet {
                 Class<?> controllerClass = handler.getControllerClass();
                 Object controllerBean = BeanHelper.getBean(controllerClass);
 
-                Param param;
-                if (UploadHelper.isMultipart(request)) {
-                    param = UploadHelper.createParam(request);
-                } else {
-                    param = RequestHelper.createParam(request);
-                }
+                //初始化参数
+                Param param = RequestHelper.createParam(request);
 
                 Object result;
                 Method actionMethod = handler.getActionMethod();
@@ -76,6 +71,7 @@ public class DispatcherServlet extends HttpServlet {
                     result = ReflectionUtil.invokeMethod(controllerBean, actionMethod, param);
                 }
 
+                //跳转页面或返回json数据
                 if (result instanceof View) {
                     handleViewResult((View) result, request, response);
                 } else if (result instanceof Data) {

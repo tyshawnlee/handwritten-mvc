@@ -1,7 +1,7 @@
 package com.tyshawn.framework.helper;
 
 import com.tyshawn.framework.util.ClassUtil;
-import com.tyshawn.framework.util.CollectionUtil;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.*;
@@ -18,6 +18,9 @@ import java.util.*;
 
 /**
  * 数据库操作助手类
+ *
+ * @author huangyong
+ * @since 1.0.0
  */
 public final class DatabaseHelper {
 
@@ -266,7 +269,7 @@ public final class DatabaseHelper {
      * 插入实体
      */
     public static <T> boolean insertEntity(Class<T> entityClass, Map<String, Object> fieldMap) {
-        if (CollectionUtil.isEmpty(fieldMap)) {
+        if (MapUtils.isEmpty(fieldMap)) {
             LOGGER.error("can not insert entity: fieldMap is empty");
             return false;
         }
@@ -291,7 +294,7 @@ public final class DatabaseHelper {
      * 更新实体
      */
     public static <T> boolean updateEntity(Class<T> entityClass, long id, Map<String, Object> fieldMap) {
-        if (CollectionUtil.isEmpty(fieldMap)) {
+        if (MapUtils.isEmpty(fieldMap)) {
             LOGGER.error("can not update entity: fieldMap is empty");
             return false;
         }

@@ -17,7 +17,9 @@ public final class BeanHelper {
     private static final Map<Class<?>, Object> BEAN_MAP = new HashMap<Class<?>, Object>();
 
     static {
+        //获取所有bean
         Set<Class<?>> beanClassSet = ClassHelper.getBeanClassSet();
+        //将bean实例化, 并放入bean容器中
         for (Class<?> beanClass : beanClassSet) {
             Object obj = ReflectionUtil.newInstance(beanClass);
             BEAN_MAP.put(beanClass, obj);
@@ -25,7 +27,7 @@ public final class BeanHelper {
     }
 
     /**
-     * 获取 Bean 映射
+     * 获取 Bean 容器
      */
     public static Map<Class<?>, Object> getBeanMap() {
         return BEAN_MAP;
