@@ -1,14 +1,18 @@
 package com.tyshawn.framework;
 
 
+import com.alibaba.fastjson.JSON;
 import com.tyshawn.framework.bean.Data;
 import com.tyshawn.framework.bean.Handler;
 import com.tyshawn.framework.bean.Param;
 import com.tyshawn.framework.bean.View;
-import com.tyshawn.framework.helper.*;
-import com.tyshawn.framework.util.JsonUtil;
+import com.tyshawn.framework.helper.BeanHelper;
+import com.tyshawn.framework.helper.ConfigHelper;
+import com.tyshawn.framework.helper.ControllerHelper;
+import com.tyshawn.framework.helper.RequestHelper;
 import com.tyshawn.framework.util.ReflectionUtil;
-import com.tyshawn.framework.util.StringUtil;
+import org.apache.commons.collections4.EnumerationUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -36,59 +40,63 @@ public class DispatcherServlet extends HttpServlet {
 
         ServletContext servletContext = servletConfig.getServletContext();
 
+        //注册处理jsp和静态资源的servlet
         registerServlet(servletContext);
     }
 
     private void registerServlet(ServletContext servletContext) {
         ServletRegistration jspServlet = servletContext.getServletRegistration("jsp");
-        jspServlet.addMapping("/index.jsp");
+//        jspServlet.addMapping("/index.jsp");
         jspServlet.addMapping(ConfigHelper.getAppJspPath() + "*");
 
         ServletRegistration defaultServlet = servletContext.getServletRegistration("default");
-        defaultServlet.addMapping("/favicon.ico");
+//        defaultServlet.addMapping("/favicon.ico");
         defaultServlet.addMapping(ConfigHelper.getAppAssetPath() + "*");
     }
 
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ServletHelper.init(request, response);
-        try {
-            String requestMethod = request.getMethod().toLowerCase();
-            String requestPath = request.getPathInfo();
-            Handler handler = ControllerHelper.getHandler(requestMethod, requestPath);
-            if (handler != null) {
-                Class<?> controllerClass = handler.getControllerClass();
-                Object controllerBean = BeanHelper.getBean(controllerClass);
+        String requestMethod = request.getMethod().toLowerCase();
+        String requestPath = request.getPathInfo();
+        Handler handler = ControllerHelper.getHandler(requestMethod, requestPath);
+        if (handler != null) {
+            Class<?> controllerClass = handler.getControllerClass();
+            Object controllerBean = BeanHelper.getBean(controllerClass);
 
-                //初始化参数
-                Param param = RequestHelper.createParam(request);
+            //初始化参数
+            Param param = RequestHelper.createParam(request);
 
-                Object result;
-                Method actionMethod = handler.getActionMethod();
-                if (param.isEmpty()) {
-                    result = ReflectionUtil.invokeMethod(controllerBean, actionMethod);
-                } else {
-                    result = ReflectionUtil.invokeMethod(controllerBean, actionMethod, param);
-                }
-
-                //跳转页面或返回json数据
-                if (result instanceof View) {
-                    handleViewResult((View) result, request, response);
-                } else if (result instanceof Data) {
-                    handleDataResult((Data) result, response);
-                }
+            Object result;
+            Method actionMethod = handler.getActionMethod();
+            if (param == null || param.isEmpty()) {
+                result = ReflectionUtil.invokeMethod(controllerBean, actionMethod);
+            } else {
+                result = ReflectionUtil.invokeMethod(controllerBean, actionMethod, param);
             }
-        } finally {
-            ServletHelper.destroy();
+
+            //跳转页面或返回json数据
+            if (result instanceof View) {
+                handleViewResult((View) result, request, response);
+            } else if (result instanceof Data) {
+                handleDataResult((Data) result, response);
+            }
         }
     }
 
+    /**
+     * 跳转页面
+     * @param view
+     * @param request
+     * @param response
+     * @throws IOException
+     * @throws ServletException
+     */
     private void handleViewResult(View view, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String path = view.getPath();
-        if (StringUtil.isNotEmpty(path)) {
-            if (path.startsWith("/")) {
+        if (StringUtils.isNotEmpty(path)) {
+            if (path.startsWith("/")) { //重定向
                 response.sendRedirect(request.getContextPath() + path);
-            } else {
+            } else { //请求转发
                 Map<String, Object> model = view.getModel();
                 for (Map.Entry<String, Object> entry : model.entrySet()) {
                     request.setAttribute(entry.getKey(), entry.getValue());
@@ -98,13 +106,19 @@ public class DispatcherServlet extends HttpServlet {
         }
     }
 
+    /**
+     * 返回JSON数据
+     * @param data
+     * @param response
+     * @throws IOException
+     */
     private void handleDataResult(Data data, HttpServletResponse response) throws IOException {
         Object model = data.getModel();
         if (model != null) {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             PrintWriter writer = response.getWriter();
-            String json = JsonUtil.toJson(model);
+            String json = JSON.toJSON(model).toString();
             writer.write(json);
             writer.flush();
             writer.close();

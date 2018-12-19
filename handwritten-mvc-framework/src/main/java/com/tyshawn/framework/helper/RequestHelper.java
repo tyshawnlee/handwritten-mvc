@@ -4,8 +4,8 @@ import com.google.common.collect.Maps;
 import com.tyshawn.framework.bean.Param;
 import com.tyshawn.framework.util.CodecUtil;
 import com.tyshawn.framework.util.StreamUtil;
-import com.tyshawn.framework.util.StringUtil;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -23,6 +23,10 @@ public final class RequestHelper {
     public static Param createParam(HttpServletRequest request) throws IOException {
         Map<String, Object> paramMap = Maps.newHashMap();
         Enumeration<String> paramNames = request.getParameterNames();
+       if (!paramNames.hasMoreElements()){
+           return null;
+       }
+
         while (paramNames.hasMoreElements()) {
             String fieldName = paramNames.nextElement();
             String fieldValue = request.getParameter(fieldName);
@@ -30,11 +34,11 @@ public final class RequestHelper {
         }
 
         String body = CodecUtil.decodeURL(StreamUtil.getString(request.getInputStream()));
-        if (StringUtil.isNotEmpty(body)) {
-            String[] kvs = StringUtil.splitString(body, "&");
+        if (StringUtils.isNotEmpty(body)) {
+            String[] kvs = StringUtils.split(body, "&");
             if (ArrayUtils.isNotEmpty(kvs)) {
                 for (String kv : kvs) {
-                    String[] array = StringUtil.splitString(kv, "=");
+                    String[] array = StringUtils.split(kv, "=");
                     if (ArrayUtils.isNotEmpty(array) && array.length == 2) {
                         String fieldName = array[0];
                         String fieldValue = array[1];

@@ -1,5 +1,6 @@
 package com.tyshawn.framework.util;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -101,17 +102,17 @@ public final class ClassUtil {
             String fileName = file.getName();
             if (file.isFile()) {
                 String className = fileName.substring(0, fileName.lastIndexOf("."));
-                if (StringUtil.isNotEmpty(packageName)) {
+                if (StringUtils.isNotEmpty(packageName)) {
                     className = packageName + "." + className;
                 }
                 doAddClass(classSet, className);
             } else {
                 String subPackagePath = fileName;
-                if (StringUtil.isNotEmpty(packagePath)) {
+                if (StringUtils.isNotEmpty(packagePath)) {
                     subPackagePath = packagePath + "/" + subPackagePath;
                 }
                 String subPackageName = fileName;
-                if (StringUtil.isNotEmpty(packageName)) {
+                if (StringUtils.isNotEmpty(packageName)) {
                     subPackageName = packageName + "." + subPackageName;
                 }
                 addClass(classSet, subPackagePath, subPackageName);

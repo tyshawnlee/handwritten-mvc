@@ -67,13 +67,6 @@ public final class ConfigHelper {
     }
 
     /**
-     * 获取应用文件上传限制
-     */
-    public static int getAppUploadLimit() {
-        return PropsUtil.getInt(CONFIG_PROPS, ConfigConstant.APP_UPLOAD_LIMIT, 10);
-    }
-
-    /**
      * 根据属性名获取 String 类型的属性值
      */
     public static String getString(String key) {
