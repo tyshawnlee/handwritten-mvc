@@ -11,14 +11,14 @@ import java.util.List;
  */
 public class ProxyChain {
 
-    private final Class<?> targetClass;
-    private final Object targetObject;
-    private final Method targetMethod;
-    private final MethodProxy methodProxy;
-    private final Object[] methodParams;
+    private final Class<?> targetClass; //目标类
+    private final Object targetObject; //目标对象
+    private final Method targetMethod; //目标方法
+    private final MethodProxy methodProxy; //方法代理
+    private final Object[] methodParams; //方法参数
 
-    private List<Proxy> proxyList = new ArrayList<Proxy>();
-    private int proxyIndex = 0;
+    private List<Proxy> proxyList = new ArrayList<>(); //代理列表
+    private int proxyIndex = 0; //代理索引
 
     public ProxyChain(Class<?> targetClass, Object targetObject, Method targetMethod, MethodProxy methodProxy, Object[] methodParams, List<Proxy> proxyList) {
         this.targetClass = targetClass;
@@ -41,11 +41,16 @@ public class ProxyChain {
         return targetMethod;
     }
 
+    /**
+     * 递归执行
+     */
     public Object doProxyChain() throws Throwable {
         Object methodResult;
         if (proxyIndex < proxyList.size()) {
+            //执行增强方法
             methodResult = proxyList.get(proxyIndex++).doProxy(this);
         } else {
+            //目标方法最后执行且只执行一次
             methodResult = methodProxy.invokeSuper(targetObject, methodParams);
         }
         return methodResult;

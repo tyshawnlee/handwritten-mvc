@@ -1,9 +1,9 @@
 package com.tyshawn.service;
 
-import com.google.common.collect.Lists;
 import com.tyshawn.domain.UserBean;
 import com.tyshawn.framework.annotation.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,7 +15,7 @@ public class UserService {
      * 获取所有用户
      */
     public List<UserBean> getAllUser(){
-        List<UserBean> userList = Lists.newArrayList();
+        List<UserBean> userList = new ArrayList<>();
         userList.add(new UserBean(1,"Tyshawn", 23));
         userList.add(new UserBean(2,"Bob", 32));
 

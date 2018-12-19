@@ -20,10 +20,15 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping("get:/userList")
-    public View getUserList(){
+    public View getUserList() {
         List<UserBean> userList = userService.getAllUser();
+        try {
+            Thread.sleep(3000L);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-        return new View("index.jsp").addModel("userList",userList);
+        return new View("index.jsp").addModel("userList", userList);
     }
 
     @RequestMapping("get:/userEdit")

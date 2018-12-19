@@ -66,6 +66,7 @@ public class DispatcherServlet extends HttpServlet {
             //初始化参数
             Param param = RequestHelper.createParam(request);
 
+            //调用与请求对应的方法
             Object result;
             Method actionMethod = handler.getActionMethod();
             if (param == null || param.isEmpty()) {
@@ -85,11 +86,6 @@ public class DispatcherServlet extends HttpServlet {
 
     /**
      * 跳转页面
-     * @param view
-     * @param request
-     * @param response
-     * @throws IOException
-     * @throws ServletException
      */
     private void handleViewResult(View view, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String path = view.getPath();
@@ -108,9 +104,6 @@ public class DispatcherServlet extends HttpServlet {
 
     /**
      * 返回JSON数据
-     * @param data
-     * @param response
-     * @throws IOException
      */
     private void handleDataResult(Data data, HttpServletResponse response) throws IOException {
         Object model = data.getModel();
