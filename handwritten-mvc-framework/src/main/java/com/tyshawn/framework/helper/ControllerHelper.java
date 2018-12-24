@@ -27,22 +27,23 @@ public final class ControllerHelper {
         Set<Class<?>> controllerClassSet = ClassHelper.getControllerClassSet();
         if (CollectionUtils.isNotEmpty(controllerClassSet)) {
             for (Class<?> controllerClass : controllerClassSet) {
-                Method[] methods = controllerClass.getDeclaredMethods(); //暴力反射获取方法
+                //暴力反射获取所有方法
+                Method[] methods = controllerClass.getDeclaredMethods();
+                //遍历方法
                 if (ArrayUtils.isNotEmpty(methods)) {
                     for (Method method : methods) {
-                        if (method.isAnnotationPresent(RequestMapping.class)) { //判断是否带RequestMapping注解
+                        //判断是否带RequestMapping注解
+                        if (method.isAnnotationPresent(RequestMapping.class)) {
                             RequestMapping requestMapping = method.getAnnotation(RequestMapping.class);
-                            String mapping = requestMapping.value();
-                            if (mapping.matches("\\w+:/\\w*")) {
-                                String[] array = mapping.split(":");
-                                if (ArrayUtils.isNotEmpty(array) && array.length == 2) {
-                                    String requestMethod = array[0];
-                                    String requestPath = array[1];
-                                    Request request = new Request(requestMethod, requestPath);
-                                    Handler handler = new Handler(controllerClass, method);
-                                    REQUEST_MAP.put(request, handler);
-                                }
-                            }
+                            //请求路径
+                            String requestPath = requestMapping.value();
+                            //请求方法
+                            String requestMethod = requestMapping.method().name();
+
+                            //封装请求和处理器
+                            Request request = new Request(requestMethod, requestPath);
+                            Handler handler = new Handler(controllerClass, method);
+                            REQUEST_MAP.put(request, handler);
                         }
                     }
                 }

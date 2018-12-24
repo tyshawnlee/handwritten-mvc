@@ -13,7 +13,14 @@ import java.lang.annotation.Target;
 public @interface RequestMapping {
 
     /**
-     * 请求类型与路径
+     * 请求路径
+     * @return
      */
-    String value();
+    String value() default "";
+
+    /**
+     * 请求方法
+     * @return
+     */
+    RequestMethod method() default RequestMethod.GET;
 }

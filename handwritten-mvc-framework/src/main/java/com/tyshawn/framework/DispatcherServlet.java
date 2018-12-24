@@ -56,8 +56,16 @@ public class DispatcherServlet extends HttpServlet {
 
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String requestMethod = request.getMethod().toLowerCase();
+        String requestMethod = request.getMethod().toUpperCase();
         String requestPath = request.getPathInfo();
+
+        //这里根据Tomcat的配置路径有两种情况, 一种是 "/userList", 另一种是 "/context地址/userList".
+        String[] splits = requestPath.split("/");
+        if (splits.length > 2) {
+            requestPath = "/" + splits[2];
+        }
+
+        //根据请求获取处理器
         Handler handler = ControllerHelper.getHandler(requestMethod, requestPath);
         if (handler != null) {
             Class<?> controllerClass = handler.getControllerClass();
