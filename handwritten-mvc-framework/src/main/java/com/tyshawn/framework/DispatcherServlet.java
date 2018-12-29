@@ -29,6 +29,7 @@ import java.util.Map;
 
 /**
  * 请求转发器
+ * 该Servlet将会在Web容器启动时加载
  */
 @WebServlet(urlPatterns = "/*", loadOnStartup = 0)
 public class DispatcherServlet extends HttpServlet {
@@ -38,19 +39,26 @@ public class DispatcherServlet extends HttpServlet {
         //初始化相关的helper类
         HelperLoader.init();
 
+        //获取ServletContext对象, 用于注册Servlet
         ServletContext servletContext = servletConfig.getServletContext();
 
         //注册处理jsp和静态资源的servlet
         registerServlet(servletContext);
     }
 
+    /**
+     * DefaultServlet和JspServlet都是由Web容器创建
+     * org.apache.catalina.servlets.DefaultServlet
+     * org.apache.jasper.servlet.JspServlet
+     */
     private void registerServlet(ServletContext servletContext) {
+        //动态注册处理JSP的Servlet
         ServletRegistration jspServlet = servletContext.getServletRegistration("jsp");
-//        jspServlet.addMapping("/index.jsp");
         jspServlet.addMapping(ConfigHelper.getAppJspPath() + "*");
 
+        //动态注册处理静态资源的默认Servlet
         ServletRegistration defaultServlet = servletContext.getServletRegistration("default");
-//        defaultServlet.addMapping("/favicon.ico");
+        defaultServlet.addMapping("/favicon.ico"); //网站头像
         defaultServlet.addMapping(ConfigHelper.getAppAssetPath() + "*");
     }
 
@@ -65,7 +73,7 @@ public class DispatcherServlet extends HttpServlet {
             requestPath = "/" + splits[2];
         }
 
-        //根据请求获取处理器
+        //根据请求获取处理器(这里类似于SpringMVC中的映射处理器)
         Handler handler = ControllerHelper.getHandler(requestMethod, requestPath);
         if (handler != null) {
             Class<?> controllerClass = handler.getControllerClass();
@@ -74,7 +82,7 @@ public class DispatcherServlet extends HttpServlet {
             //初始化参数
             Param param = RequestHelper.createParam(request);
 
-            //调用与请求对应的方法
+            //调用与请求对应的方法(这里类似于SpringMVC中的处理器适配器)
             Object result;
             Method actionMethod = handler.getActionMethod();
             if (param == null || param.isEmpty()) {
@@ -83,7 +91,7 @@ public class DispatcherServlet extends HttpServlet {
                 result = ReflectionUtil.invokeMethod(controllerBean, actionMethod, param);
             }
 
-            //跳转页面或返回json数据
+            //跳转页面或返回json数据(这里类似于SpringMVC中的视图解析器)
             if (result instanceof View) {
                 handleViewResult((View) result, request, response);
             } else if (result instanceof Data) {
