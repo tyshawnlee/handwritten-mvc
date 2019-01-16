@@ -1,6 +1,10 @@
 package com.tyshawn.pattern;
 
 
+import net.sf.cglib.proxy.Enhancer;
+
+import java.lang.reflect.Proxy;
+
 /**
  * @author litianxiang
  */

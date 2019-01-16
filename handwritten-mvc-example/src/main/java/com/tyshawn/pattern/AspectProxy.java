@@ -36,22 +36,40 @@ public abstract class AspectProxy implements MethodInterceptor {
         return result;
     }
 
+    /**
+     * 开始增强
+     */
     public void begin() {
     }
 
+    /**
+     * 切入点判断
+     */
     public boolean isIntercept(Method method, Object[] args) throws Throwable {
         return true;
     }
 
+    /**
+     * 前置增强
+     */
     public void before() throws Throwable {
     }
 
+    /**
+     * 后置增强
+     */
     public void after() throws Throwable {
     }
 
+    /**
+     * 异常增强
+     */
     public void error(Throwable e) {
     }
 
+    /**
+     * 最终增强
+     */
     public void end() {
     }
 }

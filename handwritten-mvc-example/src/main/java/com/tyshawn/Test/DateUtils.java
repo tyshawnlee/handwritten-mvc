@@ -1,4 +1,4 @@
-package com.tyshawn;
+package com.tyshawn.Test;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
