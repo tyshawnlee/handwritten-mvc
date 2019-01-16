@@ -7,7 +7,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * 封装请求信息
  */
 public class Request {
-
     /**
      * 请求方法
      */
@@ -33,7 +32,6 @@ public class Request {
 
     @Override
     public int hashCode() {
-//        return HashCodeBuilder.reflectionHashCode(this);
         int result = 17;
         result = 31 * result + requestMethod.hashCode();
         result = 31 * result + requestPath.hashCode();
@@ -42,7 +40,6 @@ public class Request {
 
     @Override
     public boolean equals(Object obj) {
-//        return EqualsBuilder.reflectionEquals(this, obj);
         if (this == obj) return true;
         if (!(obj instanceof Request)) return false;
         Request request = (Request) obj;

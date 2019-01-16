@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * 代理管理器
  */
-public class ProxyManager {
+public class ProxyFactory {
 
     /**
      * 输入一个目标类和一组Proxy接口实现, 输出一个代理对象

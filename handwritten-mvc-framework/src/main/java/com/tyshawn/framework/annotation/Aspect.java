@@ -10,7 +10,7 @@ import java.lang.annotation.*;
 public @interface Aspect {
 
     /**
-     * 注解
+     * 属性注解
      */
     Class<? extends Annotation> value();
 }
