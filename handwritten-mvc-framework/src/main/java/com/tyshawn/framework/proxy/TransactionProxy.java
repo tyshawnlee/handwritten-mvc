@@ -14,6 +14,7 @@ public class TransactionProxy implements Proxy {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TransactionProxy.class);
 
+    //保证同一线程中事务控制的相关逻辑只会执行一次
     private static final ThreadLocal<Boolean> FLAG_HOLDER = new ThreadLocal<Boolean>() {
         @Override
         protected Boolean initialValue() {

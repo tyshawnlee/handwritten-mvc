@@ -42,10 +42,10 @@ public final class AopHelper {
      * 获取切面类-目标类集合的映射
      */
     private static Map<Class<?>, Set<Class<?>>> createAspectMap() throws Exception {
-        Map<Class<?>, Set<Class<?>>> proxyMap = new HashMap<Class<?>, Set<Class<?>>>();
-        addAspectProxy(proxyMap);
-        addTransactionProxy(proxyMap);
-        return proxyMap;
+        Map<Class<?>, Set<Class<?>>> aspectMap = new HashMap<Class<?>, Set<Class<?>>>();
+        addAspectProxy(aspectMap);
+        addTransactionProxy(aspectMap);
+        return aspectMap;
     }
 
     /**
