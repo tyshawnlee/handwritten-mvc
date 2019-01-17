@@ -1,6 +1,6 @@
 package com.tyshawn.controller;
 
-import com.tyshawn.domain.UserBean;
+import com.tyshawn.domain.User;
 import com.tyshawn.framework.annotation.Autowired;
 import com.tyshawn.framework.annotation.Controller;
 import com.tyshawn.framework.annotation.RequestMapping;
@@ -10,7 +10,9 @@ import com.tyshawn.framework.bean.Param;
 import com.tyshawn.framework.bean.View;
 import com.tyshawn.service.IUserService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author litianxiang
@@ -20,24 +22,40 @@ public class UserController {
     @Autowired
     private IUserService userService;
 
+    /**
+     * 用户列表
+     *
+     * @return
+     */
     @RequestMapping(value = "/userList", method = RequestMethod.GET)
     public View getUserList() {
-        List<UserBean> userList = userService.getAllUser();
-        try {
-            //延迟3s, 模拟性能
-            Thread.sleep(3000L);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
+        List<User> userList = userService.getAllUser();
         return new View("index.jsp").addModel("userList", userList);
     }
 
-    @RequestMapping(value = "/userEdit", method = RequestMethod.GET)
+    /**
+     * 用户详情
+     *
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/userInfo", method = RequestMethod.GET)
     public Data getUserInfo(Param param) {
         String id = (String) param.getParamMap().get("id");
-        UserBean userBean = userService.GetUserInfoById(Integer.parseInt(id));
+        User user = userService.GetUserInfoById(Integer.parseInt(id));
 
-        return new Data(userBean);
+        return new Data(user);
     }
+
+    @RequestMapping(value = "/userEdit", method = RequestMethod.GET)
+    public Data editUser(Param param) {
+        String id = (String) param.getParamMap().get("id");
+        Map<String, Object> fieldMap = new HashMap<>();
+        fieldMap.put("age", 911);
+        userService.updateUser(Integer.parseInt(id), fieldMap);
+        userService.updateUser(Integer.parseInt(id), fieldMap);
+
+        return new Data("Success.");
+    }
+
 }

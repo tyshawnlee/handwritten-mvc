@@ -1,14 +1,17 @@
 package com.tyshawn.service;
 
-import com.tyshawn.domain.UserBean;
+import com.tyshawn.domain.User;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author litianxiang
  */
 public interface IUserService {
-    List<UserBean> getAllUser();
+    List<User> getAllUser();
 
-    UserBean GetUserInfoById(Integer id);
+    User GetUserInfoById(Integer id);
+
+    boolean updateUser(int id, Map<String, Object> fieldMap);
 }

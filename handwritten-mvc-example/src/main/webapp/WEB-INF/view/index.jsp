@@ -23,8 +23,8 @@
             <td>${userinfo.name}</td>
             <td>${userinfo.age}</td>
             <td>
+                <a href="${BASE}/userInfo?id=${userinfo.id}">详情</a>
                 <a href="${BASE}/userEdit?id=${userinfo.id}">编辑</a>
-                <a href="${BASE}/userDel?id=${userinfo.id}">删除</a>
             </td>
         </tr>
     </c:forEach>
