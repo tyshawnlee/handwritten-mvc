@@ -2,7 +2,7 @@ package com.tyshawn.service.Impl;
 
 import com.tyshawn.domain.User;
 import com.tyshawn.framework.annotation.Service;
-import com.tyshawn.framework.annotation.Transaction;
+import com.tyshawn.framework.annotation.Transactional;
 import com.tyshawn.framework.helper.DatabaseHelper;
 import com.tyshawn.service.IUserService;
 
@@ -33,7 +33,7 @@ public class UserService implements IUserService {
     /**
      * 修改用户信息
      */
-    @Transaction
+    @Transactional
     public boolean updateUser(int id, Map<String, Object> fieldMap) {
         return DatabaseHelper.updateEntity(User.class, id, fieldMap);
     }

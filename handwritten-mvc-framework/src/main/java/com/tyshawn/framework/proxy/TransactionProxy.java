@@ -1,6 +1,6 @@
 package com.tyshawn.framework.proxy;
 
-import com.tyshawn.framework.annotation.Transaction;
+import com.tyshawn.framework.annotation.Transactional;
 import com.tyshawn.framework.helper.DatabaseHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +18,7 @@ public class TransactionProxy implements Proxy {
     public Object doProxy(ProxyChain proxyChain) throws Throwable {
         Object result;
         Method method = proxyChain.getTargetMethod();
-        if (method.isAnnotationPresent(Transaction.class)) {
+        if (method.isAnnotationPresent(Transactional.class)) {
             try {
                 DatabaseHelper.beginTransaction();
                 LOGGER.debug("begin transaction");
