@@ -1,26 +1,23 @@
 package com.tyshawn.framework.helper;
 
-import com.tyshawn.framework.util.ClassUtil;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.*;
+import org.apache.commons.dbutils.handlers.BeanHandler;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 数据库操作助手类
- *
- * @author huangyong
- * @since 1.0.0
+ * @author litianxiang
  */
 public final class DatabaseHelper {
 
@@ -153,104 +150,6 @@ public final class DatabaseHelper {
     }
 
     /**
-     * 查询并返回单个列值
-     */
-    public static <T> T query(String sql, Object... params) {
-        T obj;
-        try {
-            Connection conn = getConnection();
-            obj = QUERY_RUNNER.query(conn, sql, new ScalarHandler<T>(), params);
-        } catch (SQLException e) {
-            LOGGER.error("query failure", e);
-            throw new RuntimeException(e);
-        }
-        return obj;
-    }
-
-    /**
-     * 查询并返回多个列值
-     */
-    public static <T> List<T> queryList(String sql, Object... params) {
-        List<T> list;
-        try {
-            Connection conn = getConnection();
-            list = QUERY_RUNNER.query(conn, sql, new ColumnListHandler<T>(), params);
-        } catch (SQLException e) {
-            LOGGER.error("query list failure", e);
-            throw new RuntimeException(e);
-        }
-        return list;
-    }
-
-    /**
-     * 查询并返回多个列值（具有唯一性）
-     */
-    public static <T> Set<T> querySet(String sql, Object... params) {
-        Collection<T> valueList = queryList(sql, params);
-        return new LinkedHashSet<T>(valueList);
-    }
-
-    /**
-     * 查询并返回数组
-     */
-    public static Object[] queryArray(String sql, Object... params) {
-        Object[] resultArray;
-        try {
-            Connection conn = getConnection();
-            resultArray = QUERY_RUNNER.query(conn, sql, new ArrayHandler(), params);
-        } catch (SQLException e) {
-            LOGGER.error("query array failure", e);
-            throw new RuntimeException(e);
-        }
-        return resultArray;
-    }
-
-    /**
-     * 查询并返回数组列表
-     */
-    public static List<Object[]> queryArrayList(String sql, Object... params) {
-        List<Object[]> resultArrayList;
-        try {
-            Connection conn = getConnection();
-            resultArrayList = QUERY_RUNNER.query(conn, sql, new ArrayListHandler(), params);
-        } catch (SQLException e) {
-            LOGGER.error("query array list failure", e);
-            throw new RuntimeException(e);
-        }
-        return resultArrayList;
-    }
-
-    /**
-     * 查询并返回结果集映射（列名 => 列值）
-     */
-    public static Map<String, Object> queryMap(String sql, Object... params) {
-        Map<String, Object> resultMap;
-        try {
-            Connection conn = getConnection();
-            resultMap = QUERY_RUNNER.query(conn, sql, new MapHandler(), params);
-        } catch (SQLException e) {
-            LOGGER.error("query map failure", e);
-            throw new RuntimeException(e);
-        }
-        return resultMap;
-    }
-
-    /**
-     * 查询并返回结果集映射列表（列名 => 列值）
-     */
-    public static List<Map<String, Object>> queryMapList(String sql, Object... params) {
-        List<Map<String, Object>> resultMapList;
-        try {
-            Connection conn = getConnection();
-            resultMapList = QUERY_RUNNER.query(conn, sql, new MapListHandler(), params);
-        } catch (SQLException e) {
-            LOGGER.error("query map list failure", e);
-            throw new RuntimeException(e);
-        }
-        return resultMapList;
-    }
-
-    /**
      * 执行更新语句（包括：update、insert、delete）
      */
     public static int update(String sql, Object... params) {
@@ -320,22 +219,5 @@ public final class DatabaseHelper {
     public static <T> boolean deleteEntity(Class<T> entityClass, long id) {
         String sql = "DELETE FROM " + entityClass.getSimpleName() + " WHERE id = ?";
         return update(sql, id) == 1;
-    }
-
-    /**
-     * 执行 SQL 文件
-     */
-    public static void executeSqlFile(String filePath) {
-        InputStream is = ClassUtil.getClassLoader().getResourceAsStream(filePath);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        try {
-            String sql;
-            while ((sql = reader.readLine()) != null) {
-                update(sql);
-            }
-        } catch (Exception e) {
-            LOGGER.error("execute sql file failure", e);
-            throw new RuntimeException(e);
-        }
     }
 }
