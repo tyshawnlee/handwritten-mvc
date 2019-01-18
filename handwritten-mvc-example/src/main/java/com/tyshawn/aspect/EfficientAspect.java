@@ -8,11 +8,11 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Method;
 
 /**
- * 拦截 Controller
+ * 性能切面, 获取接口执行时间
  */
 @Aspect(pkg = "com.tyshawn.controller", cls = "UserController")
-public class ControllerAspect extends AspectProxy {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ControllerAspect.class);
+public class EfficientAspect extends AspectProxy {
+    private static final Logger LOGGER = LoggerFactory.getLogger(EfficientAspect.class);
 
     private long begin;
 
