@@ -1,7 +1,6 @@
 package com.tyshawn.aspect;
 
 import com.tyshawn.framework.annotation.Aspect;
-import com.tyshawn.framework.annotation.Controller;
 import com.tyshawn.framework.proxy.AspectProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,24 +8,30 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Method;
 
 /**
- * 拦截 Controller 所有方法
+ * 拦截 Controller
  */
-@Aspect(Controller.class)
+@Aspect(pkg = "com.tyshawn.controller", cls = "UserController")
 public class ControllerAspect extends AspectProxy {
     private static final Logger LOGGER = LoggerFactory.getLogger(ControllerAspect.class);
 
     private long begin;
 
+    /**
+     * 切入点判断
+     */
     @Override
-    public void before(Class<?> cls, Method method, Object[] params) throws Throwable {
+    public boolean intercept(Method method, Object[] params) throws Throwable {
+        return method.getName().equals("getUserList");
+    }
+
+    @Override
+    public void before(Method method, Object[] params) throws Throwable {
         LOGGER.debug("---------- begin ----------");
-        LOGGER.debug(String.format("class: %s", cls.getName()));
-        LOGGER.debug(String.format("method: %s", method.getName()));
         begin = System.currentTimeMillis();
     }
 
     @Override
-    public void after(Class<?> cls, Method method, Object[] params, Object result) throws Throwable {
+    public void after(Method method, Object[] params) throws Throwable {
         LOGGER.debug(String.format("time: %dms", System.currentTimeMillis() - begin));
         LOGGER.debug("----------- end -----------");
     }

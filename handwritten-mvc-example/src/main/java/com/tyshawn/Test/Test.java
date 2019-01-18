@@ -11,15 +11,10 @@ import java.util.Date;
 public class Test {
     public static void main(String[] args) {
 
-        String web = "http://wting.info/asdb/fiction/wuxia/sunxx/uidb4i51.mp3";
-        if (!web.contains("vb.wting.info")) {
-            System.out.println("导入失败：收费书籍域名错误");
-        }
-        if (web.contains("vb.wting.info")) {
-            System.out.println("导入失败：免费书籍域名错误");
-        }
+        String imei = "MDE0NzQ3QjktQzJGMi00QzhGLUFGMjAtNkJFMjRCQzRFNDYw";
 
-
-
+        System.out.println(imei);
+//        System.out.println(Base64.decode(imei));
+        System.out.println(Base64.decode(imei).toString());
     }
 }

@@ -8,9 +8,13 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Aspect {
+    /**
+     * 包名
+     */
+    String pkg() default "";
 
     /**
-     * 属性注解
+     * 类名
      */
-    Class<? extends Annotation> value();
+    String cls() default "";
 }

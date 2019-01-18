@@ -53,7 +53,6 @@ public class UserController {
         Map<String, Object> fieldMap = new HashMap<>();
         fieldMap.put("age", 911);
         userService.updateUser(Integer.parseInt(id), fieldMap);
-        userService.updateUser(Integer.parseInt(id), fieldMap);
 
         return new Data("Success.");
     }

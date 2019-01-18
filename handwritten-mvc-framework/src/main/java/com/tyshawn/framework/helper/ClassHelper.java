@@ -1,6 +1,5 @@
 package com.tyshawn.framework.helper;
 
-import com.tyshawn.framework.annotation.Bean;
 import com.tyshawn.framework.annotation.Controller;
 import com.tyshawn.framework.annotation.Service;
 import com.tyshawn.framework.util.ClassUtil;
@@ -60,17 +59,12 @@ public final class ClassHelper {
     }
 
     /**
-     * 获取基础包名下所有 Bean 类（包括：Controller、Service、Bean）
+     * 获取基础包名下所有 Bean 类（包括：Controller、Service）
      */
     public static Set<Class<?>> getBeanClassSet() {
         Set<Class<?>> beanClassSet = new HashSet<Class<?>>();
         beanClassSet.addAll(getServiceClassSet());
         beanClassSet.addAll(getControllerClassSet());
-        for (Class<?> cls : CLASS_SET) {
-            if (cls.isAnnotationPresent(Bean.class)) {
-                beanClassSet.add(cls);
-            }
-        }
         return beanClassSet;
     }
 

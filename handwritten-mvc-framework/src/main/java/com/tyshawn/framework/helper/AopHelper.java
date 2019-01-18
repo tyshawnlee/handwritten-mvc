@@ -6,6 +6,7 @@ import com.tyshawn.framework.proxy.AspectProxy;
 import com.tyshawn.framework.proxy.Proxy;
 import com.tyshawn.framework.proxy.ProxyFactory;
 import com.tyshawn.framework.proxy.TransactionProxy;
+import com.tyshawn.framework.util.ClassUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,13 +74,20 @@ public final class AopHelper {
     }
 
     /**
-     * 根据@Aspect所定义的属性注解去获取该注解所对应的目标类集合
+     * 根据@Aspect定义的包名和类名去获取对应的目标类集合
      */
     private static Set<Class<?>> createTargetClassSet(Aspect aspect) throws Exception {
         Set<Class<?>> targetClassSet = new HashSet<Class<?>>();
-        Class<? extends Annotation> annotation = aspect.value();
-        if (annotation != null && !annotation.equals(Aspect.class)) {
-            targetClassSet.addAll(ClassHelper.getClassSetByAnnotation(annotation));
+        // 包名
+        String pkg = aspect.pkg();
+        // 类名
+        String cls = aspect.cls();
+        // 如果包名与类名均不为空，则添加指定类
+        if (!pkg.equals("") && !cls.equals("")) {
+            targetClassSet.add(Class.forName(pkg + "." + cls));
+        } else if (!pkg.equals("")) {
+            // 如果包名不为空, 类名为空, 则添加该包名下所有类
+            targetClassSet.addAll(ClassUtil.getClassSet(pkg));
         }
         return targetClassSet;
     }
@@ -87,9 +95,9 @@ public final class AopHelper {
     /**
      * 将切面类-目标类集合的映射关系 转化为 目标类-切面对象列表的映射关系
      */
-    private static Map<Class<?>, List<Proxy>> createTargetMap(Map<Class<?>, Set<Class<?>>> proxyMap) throws Exception {
+    private static Map<Class<?>, List<Proxy>> createTargetMap(Map<Class<?>, Set<Class<?>>> aspectMap) throws Exception {
         Map<Class<?>, List<Proxy>> targetMap = new HashMap<Class<?>, List<Proxy>>();
-        for (Map.Entry<Class<?>, Set<Class<?>>> proxyEntry : proxyMap.entrySet()) {
+        for (Map.Entry<Class<?>, Set<Class<?>>> proxyEntry : aspectMap.entrySet()) {
             //切面类
             Class<?> aspectClass = proxyEntry.getKey();
             //目标类集合

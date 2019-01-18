@@ -22,16 +22,16 @@ public abstract class AspectProxy implements Proxy {
 
         begin();
         try {
-            if (intercept(cls, method, params)) {
-                before(cls, method, params);
+            if (intercept(method, params)) {
+                before(method, params);
                 result = proxyChain.doProxyChain();
-                after(cls, method, params, result);
+                after(method, params);
             } else {
                 result = proxyChain.doProxyChain();
             }
         } catch (Exception e) {
             logger.error("proxy failure", e);
-            error(cls, method, params, e);
+            error(method, params, e);
             throw e;
         } finally {
             end();
@@ -43,17 +43,17 @@ public abstract class AspectProxy implements Proxy {
     public void begin() {
     }
 
-    public boolean intercept(Class<?> cls, Method method, Object[] params) throws Throwable {
+    public boolean intercept(Method method, Object[] params) throws Throwable {
         return true;
     }
 
-    public void before(Class<?> cls, Method method, Object[] params) throws Throwable {
+    public void before(Method method, Object[] params) throws Throwable {
     }
 
-    public void after(Class<?> cls, Method method, Object[] params, Object result) throws Throwable {
+    public void after(Method method, Object[] params) throws Throwable {
     }
 
-    public void error(Class<?> cls, Method method, Object[] params, Throwable e) {
+    public void error(Method method, Object[] params, Throwable e) {
     }
 
     public void end() {
