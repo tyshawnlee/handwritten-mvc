@@ -18,6 +18,7 @@ public class TransactionProxy implements Proxy {
     public Object doProxy(ProxyChain proxyChain) throws Throwable {
         Object result;
         Method method = proxyChain.getTargetMethod();
+        //加了@Transactional注解的方法要做事务处理
         if (method.isAnnotationPresent(Transactional.class)) {
             try {
                 DatabaseHelper.beginTransaction();

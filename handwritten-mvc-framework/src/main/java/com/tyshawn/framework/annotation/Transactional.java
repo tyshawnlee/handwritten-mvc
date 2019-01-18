@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 定义需要事务控制的方法
+ * 事务控制, 只能加在方法上
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)

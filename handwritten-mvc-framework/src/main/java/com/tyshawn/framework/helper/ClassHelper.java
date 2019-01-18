@@ -1,5 +1,6 @@
 package com.tyshawn.framework.helper;
 
+import com.tyshawn.framework.annotation.Bean;
 import com.tyshawn.framework.annotation.Controller;
 import com.tyshawn.framework.annotation.Service;
 import com.tyshawn.framework.util.ClassUtil;
@@ -14,7 +15,7 @@ import java.util.Set;
 public final class ClassHelper {
 
     /**
-     * 定义类集合（存放应用包名下的所有类）
+     * 定义类集合（存放基础包名下的所有类）
      */
     private static final Set<Class<?>> CLASS_SET;
 
@@ -26,14 +27,14 @@ public final class ClassHelper {
     }
 
     /**
-     * 获取应用包名下的所有类
+     * 获取基础包名下的所有类
      */
     public static Set<Class<?>> getClassSet() {
         return CLASS_SET;
     }
 
     /**
-     * 获取应用包名下所有 Service 类
+     * 获取基础包名下所有 Service 类
      */
     public static Set<Class<?>> getServiceClassSet() {
         Set<Class<?>> classSet = new HashSet<Class<?>>();
@@ -46,7 +47,7 @@ public final class ClassHelper {
     }
 
     /**
-     * 获取应用包名下所有 Controller 类
+     * 获取基础包名下所有 Controller 类
      */
     public static Set<Class<?>> getControllerClassSet() {
         Set<Class<?>> classSet = new HashSet<Class<?>>();
@@ -59,17 +60,22 @@ public final class ClassHelper {
     }
 
     /**
-     * 获取应用包名下所有 Bean 类（包括：Service、Controller 等）
+     * 获取基础包名下所有 Bean 类（包括：Controller、Service、Bean）
      */
     public static Set<Class<?>> getBeanClassSet() {
         Set<Class<?>> beanClassSet = new HashSet<Class<?>>();
         beanClassSet.addAll(getServiceClassSet());
         beanClassSet.addAll(getControllerClassSet());
+        for (Class<?> cls : CLASS_SET) {
+            if (cls.isAnnotationPresent(Bean.class)) {
+                beanClassSet.add(cls);
+            }
+        }
         return beanClassSet;
     }
 
     /**
-     * 获取应用包名下某父类（或接口）的所有子类（或实现类）
+     * 获取基础包名下某父类的所有子类 或某接口的所有实现类
      */
     public static Set<Class<?>> getClassSetBySuper(Class<?> superClass) {
         Set<Class<?>> classSet = new HashSet<Class<?>>();
@@ -83,7 +89,7 @@ public final class ClassHelper {
     }
 
     /**
-     * 获取应用包名下带有某注解的所有类
+     * 获取基础包名下带有某注解的所有类
      */
     public static Set<Class<?>> getClassSetByAnnotation(Class<? extends Annotation> annotationClass) {
         Set<Class<?>> classSet = new HashSet<Class<?>>();
