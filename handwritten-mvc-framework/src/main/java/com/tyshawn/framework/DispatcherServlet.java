@@ -11,7 +11,6 @@ import com.tyshawn.framework.helper.ConfigHelper;
 import com.tyshawn.framework.helper.ControllerHelper;
 import com.tyshawn.framework.helper.RequestHelper;
 import com.tyshawn.framework.util.ReflectionUtil;
-import org.apache.commons.collections4.EnumerationUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.ServletConfig;
@@ -84,7 +83,7 @@ public class DispatcherServlet extends HttpServlet {
 
             //调用与请求对应的方法(这里类似于SpringMVC中的处理器适配器)
             Object result;
-            Method actionMethod = handler.getActionMethod();
+            Method actionMethod = handler.getControllerMethod();
             if (param == null || param.isEmpty()) {
                 result = ReflectionUtil.invokeMethod(controllerBean, actionMethod);
             } else {
