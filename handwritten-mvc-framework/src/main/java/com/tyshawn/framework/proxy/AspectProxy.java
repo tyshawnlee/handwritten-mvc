@@ -40,22 +40,40 @@ public abstract class AspectProxy implements Proxy {
         return result;
     }
 
+    /**
+     * 开始增强
+     */
     public void begin() {
     }
 
+    /**
+     * 切入点判断
+     */
     public boolean intercept(Method method, Object[] params) throws Throwable {
         return true;
     }
 
+    /**
+     * 前置增强
+     */
     public void before(Method method, Object[] params) throws Throwable {
     }
 
+    /**
+     * 后置增强
+     */
     public void after(Method method, Object[] params) throws Throwable {
     }
 
+    /**
+     * 异常增强
+     */
     public void error(Method method, Object[] params, Throwable e) {
     }
 
+    /**
+     * 最终增强
+     */
     public void end() {
     }
 }
